@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>HerMer Salon</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      background: url('https://static.vecteezy.com/system/resources/previews/010/840/602/original/hair-salon-logo-design-premium-vector.jpg') no-repeat center center fixed;
+      background-size:115%;
+
+    }
+
+    h1 {
+      text-align: center;
+      margin: 30px 0;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.6);
+    }
+
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .content-box {
+      display: flex;
+      gap: 30px; 
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .form, .bookedList {
+      width: 350px;
+      padding: 20px;
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      color:white;
+      margin-bottom: 10px;
+    }
+
+    input {
+      padding: 8px;
+      border-radius: 10px;
+      border: 1px solid #ccc;
+      width: 70%;
+    }
+
+    .btn {
+      color: rgb(176, 176, 27);
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: 0.3s ease;
+      width: 40%;
+    }
+
+    .btn:hover {
+      background-color:rgb(82, 82, 5);
+    }
+
+    .bookedList div {
+      padding: 6px;
+      margin-top: 5px;
+      border-radius: 8px;
+      color:rgb(82, 82, 5);
+    
+    }
+    label{
+         color: rgb(176, 176, 27);
+    }
+
+    @media (max-width: 768px) {
+      .content-box {
+        flex-direction: column;
+        align-items: center;
+      }
+      body{
+        background-size:200%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Welcome to HerMer Salon</h1>
+  <div class="container">
+    <div class="content-box">
+      <div class="form">
+        <h2>Book your appointment</h2>
+        <label>Name:</label>
+        <input type="text" id="name" placeholder="Enter your name" />
+        <label>Day:</label>
+        <input type="date" id="day" />
+        <label>Time:</label>
+        <input type="time" id="time" />
+        <button class="btn" onclick="check()">Submit</button>
+      </div>
+
+      <div class="bookedList">
+        <h2>Booked List</h2>
+        <!-- Appointments will appear here -->
+      </div>
+    </div>
+  </div>
+<script>
+
+
+  let appointmentsList = JSON.parse(localStorage.getItem("appointmentsList")) || [];
+
+  function check() {
+    let name = document.getElementById("name").value.trim();
+    let day = document.getElementById("day").value;
+    let time = document.getElementById("time").value;
+  
+    if (!name || !day || !time) {
+      alert("Please fill in all fields.");
+      return;
+    }
+  
+    for (let i = 0; i < appointmentsList.length; i++) {
+      if (appointmentsList[i].day === day && appointmentsList[i].time === time) {
+        alert(`Sorry ${name}, but that time is already booked. Try another.`);
+        return;
+      }
+    }
+  
+    appointmentsList.push({ name, day, time });
+    localStorage.setItem("appointmentsList", JSON.stringify(appointmentsList));
+  
+    let bookedList = document.querySelector(".bookedList");
+    let appointment = document.createElement("div");
+    appointment.textContent = `${name} - ${day} at ${time}`;
+    bookedList.appendChild(appointment);
+  
+    alert(`Hello ${name}, your appointment is successfully booked!`);
+  }
+  function loadAppointments() {
+  let bookedList = document.querySelector(".bookedList");
+  let appointmentsList = JSON.parse(localStorage.getItem("appointmentsList")) || [];
+
+  appointmentsList.forEach(({ name, day, time }) => {
+    let appointment = document.createElement("div");
+    appointment.textContent = `${name} - ${day} at ${time}`;
+    bookedList.appendChild(appointment);
+  });
+}
+loadAppointments();
+
+  </script>
+</body>
+</html>
